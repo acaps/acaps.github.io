@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Alex Capecelatro</title>
+
+<meta name="description" content="Alex Capecelatro — CEO & Co-Founder of Josh.ai. Early pioneer of AI in the home." />
+<meta name="robots" content="index,follow" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+<style>
+:root{
+  --bg:#000;
+  --text:rgba(255,255,255,.92);
+  --muted:rgba(255,255,255,.62);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+
+body{
+  margin:0;
+  background-color:#000;
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+}
+
+/* Background container from javascript.js */
+.bgfx{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:0 !important;
+  pointer-events:none !important;
+  overflow:hidden !important;
+}
+.bgfx canvas{
+  width:100% !important;
+  height:100% !important;
+  display:block !important;
+}
+
+/* Layout */
+.wrap{
+  position:relative;
+  z-index:3;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:72px 20px;
+  text-align:center;
+}
+
+.content{
+  width:min(880px,100%);
+}
+
+/* Portrait */
+.photoWrap{
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  overflow:hidden;
+  margin:0 auto 18px;
+  position:relative;
+  box-shadow:0 30px 110px rgba(0,0,0,.85);
+}
+
+.photoWrap img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transform:scale(1.06);
+}
+
+.aiOverlay{
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,.02),
+    rgba(255,255,255,.02) 6px,
+    rgba(255,255,255,.06) 7px
+  );
+  opacity:.22;
+  animation:scan 4s linear infinite;
+  mix-blend-mode:overlay;
+}
+
+@keyframes scan{
+  0%{transform:translateY(-12%)}
+  100%{transform:translateY(12%)}
+}
+
+h1{
+  margin:8px 0 10px;
+  font-size:clamp(30px,3.5vw,42px);
+  font-weight:650;
+  letter-spacing:-.03em;
+}
+
+/* Bio */
+.bio{
+  max-width:820px;
+  margin:10px auto 18px;
+  color:var(--muted);
+  line-height:1.75;
+  font-size:16px;
+}
+
+/* Buttons */
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  margin:16px 0 26px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:12px 16px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.15);
+  text-decoration:none;
+  color:#fff;
+  background:rgba(255,255,255,.04);
+  transition:.2s ease;
+}
+
+.btn:hover{
+  background:rgba(255,255,255,.08);
+  transform:translateY(-2px);
+}
+
+/* Beyond Work */
+.divider{
+  width:60px;
+  height:1px;
+  background:rgba(255,255,255,.15);
+  margin:0 auto 14px;
+}
+
+.beyond-label{
+  font-size:11px;
+  letter-spacing:.18em;
+  color:rgba(255,255,255,.4);
+  margin-bottom:10px;
+}
+
+.personal{
+  max-width:680px;
+  margin:0 auto;
+  color:rgba(255,255,255,.55);
+  line-height:1.6;
+  font-size:14px;
+}
+
+.personal a{
+  color:#fff;
+  text-decoration:none;
+  border-bottom:1px solid rgba(255,255,255,.2);
+}
+
+.personal a:hover{
+  border-bottom-color:#fff;
+}
+
+/* Social Icons */
+.social{
+  display:flex;
+  justify-content:center;
+  gap:32px;
+  margin-top:30px;
+  border-top:1px solid rgba(255,255,255,.1);
+  padding-top:24px;
+}
+
+.social a{
+  opacity:.65;
+  transition:.25s ease;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.social img{
+  width:22px;
+  height:22px;
+  filter:brightness(0) invert(1);
+  transition:.25s ease;
+}
+
+.social a:hover{
+  opacity:1;
+  transform:translateY(-2px);
+}
+
+.social a:hover img{
+  filter:brightness(0) invert(1) drop-shadow(0 0 10px rgba(255,255,255,.35));
+}
+
+.quote{
+  margin-top:18px;
+  font-size:13px;
+  color:rgba(255,255,255,.4);
+}
+
+/* Fade Up Animation */
+.fade-up{
+  opacity:0;
+  transform:translateY(16px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+
+.fade-up.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+@media (max-width:420px){
+  .photoWrap{width:156px;height:156px}
+  .social{gap:26px}
+}
+</style>
+</head>
+
+<body>
+
+<main class="wrap">
+<section class="content">
+
+<div class="photoWrap fade-up" id="fade-photo">
+<img src="alex.jpg" alt="Alex Capecelatro">
+<div class="aiOverlay"></div>
+</div>
+
+<h1 class="fade-up" id="fade-name">Alex Capecelatro</h1>
+
+<p class="bio fade-up" id="fade-bio">
+Alex Capecelatro is an entrepreneur advancing artificial intelligence from research into real-world living environments.
+As CEO & Co-Founder of Josh.ai, he has led the development of award-winning, privacy-first AI systems that bring natural language,
+large language models, and human-centered design into the modern home.
+A named inventor on multiple U.S. patents in intelligent systems and interaction design, he has served as Chair of CEDIA and sits on the Board of Integrated Systems Europe (ISE).
+He regularly speaks at leading industry forums on AI, design, and the future of connected living.
+</p>
+
+<div class="buttons fade-up" id="fade-buttons">
+<a class="btn" href="https://josh.ai" target="_blank">Josh.ai →</a>
+<a class="btn" href="https://instagram.com/alexcaps" target="_blank">Instagram →</a>
+</div>
+
+<div class="divider fade-up" id="fade-divider"></div>
+<div class="beyond-label fade-up">BEYOND WORK</div>
+
+<p class="personal fade-up">
+Outside of technology, Capecelatro is an
+<a href="https://www.instagram.com/p/DTEipiFCUAk/?img_index=1" target="_blank">art collector</a>,
+<a href="https://www.instagram.com/p/DRkXEDoj84x/" target="_blank">runner</a>,
+<a href="https://www.instagram.com/p/C2V5umaA6pR/?img_index=1" target="_blank">skier</a>,
+<a href="https://www.instagram.com/p/DJmIXSAxoUc/" target="_blank">pickleball player</a>,
+and general
+<a href="https://www.instagram.com/p/DUdzUJ4jtWs/?img_index=1" target="_blank">outdoors enthusiast</a>,
+with a passion for
+<a href="https://www.instagram.com/p/C09Lvg9A411/?img_index=1" target="_blank">travel</a>.
+</p>
+
+<div class="social fade-up">
+<a href="https://instagram.com/alexcaps" target="_blank"><img src="instagram.svg"></a>
+<a href="https://linkedin.com/in/alexcaps" target="_blank"><img src="linkedin.svg"></a>
+<a href="https://facebook.com/alexcaps" target="_blank"><img src="facebook.svg"></a>
+</div>
+
+<div class="quote fade-up">“Stay hungry. Stay foolish.” — Steve Jobs</div>
+
+</section>
+</main>
+
+<script src="javascript.js"></script>
+
+<script>
+// Pin background container behind content
+(function(){
+  const tryPin = () => {
+    const canvases = Array.from(document.querySelectorAll("canvas"));
+    if(!canvases.length) return false;
+    canvases.sort((a,b)=> (b.width*b.height)-(a.width*a.height));
+    const bgCanvas = canvases[0];
+    const container = bgCanvas.parentElement;
+    if(!container) return false;
+    container.classList.add("bgfx");
+    return true;
+  };
+  if(!tryPin()) setTimeout(tryPin,60);
+})();
+
+// Fade sequence
+window.addEventListener("DOMContentLoaded",()=>{
+  const els=document.querySelectorAll(".fade-up");
+  els.forEach((el,i)=>{
+    setTimeout(()=>el.classList.add("visible"),120*i);
+  });
+});
+</script>
+
+</body>
+</html>
