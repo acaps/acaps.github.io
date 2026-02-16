@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alex Capecelatro</title>
+  <meta name="description" content="Alex Capecelatro — CEO & Co-Founder of Josh.ai." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <style>
+    :root{
+      --bg:#000;
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.62);
+      --faint:rgba(255,255,255,.40);
+      --link:rgba(255,255,255,.82);
+      --hair:rgba(255,255,255,.12);
+      --soft:rgba(255,255,255,.06);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      overflow-x:hidden;
+    }
+
+    /* Three.js canvas */
+    #bg{position:fixed; inset:0; z-index:0; pointer-events:none;}
+
+    /* Startup reveal wash */
+    .reveal{
+      position:fixed;
+      inset:-40%;
+      z-index:1;
+      pointer-events:none;
+      background:
+        radial-gradient(700px 380px at 20% 25%, rgba(255,255,255,.18), transparent 55%),
+        radial-gradient(900px 520px at 80% 35%, rgba(255,255,255,.14), transparent 60%),
+        radial-gradient(900px 540px at 45% 75%, rgba(255,255,255,.10), transparent 62%),
+        linear-gradient(120deg, rgba(90,120,255,.30), rgba(255,90,220,.18), rgba(70,255,200,.14));
+      filter: blur(18px) saturate(1.05);
+      opacity:0.95;
+      transform: translateX(-12%) rotate(8deg);
+      animation: wash 1400ms ease forwards;
+      mix-blend-mode: screen;
+    }
+    @keyframes wash{
+      0%{opacity:0.98; transform: translateX(-14%) rotate(10deg) scale(1.06);}
+      65%{opacity:0.35;}
+      100%{opacity:0; transform: translateX(8%) rotate(6deg) scale(1.02);}
+    }
+
+    /* Vignette for premium contrast */
+    .vignette{
+      position:fixed; inset:0; z-index:2; pointer-events:none;
+      background:
+        radial-gradient(1100px 700px at 50% 18%, rgba(255,255,255,.05), transparent 60%),
+        radial-gradient(1200px 900px at 50% 50%, transparent 55%, rgba(0,0,0,.82) 100%);
+    }
+
+    .wrap{
+      position:relative; z-index:3;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:64px 18px;
+    }
+
+    /* Remove "card" look: keep a soft, invisible layout container */
+    .content{
+      width:min(880px, 100%);
+      text-align:center;
+      padding: 10px 0;
+    }
+
+    .top{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: 16px;
+    }
+
+    /* Portrait with AI overlay */
+    .photoWrap{
+      width:182px;height:182px;
+      border-radius:999px;
+      overflow:hidden;
+      position:relative;
+      box-shadow: 0 28px 90px rgba(0,0,0,.75);
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.03);
+      transform: translateZ(0);
+    }
+    .photoWrap img{
+      width:100%;height:100%;
+      object-fit:cover;
+      transform: scale(1.06);
+      display:block;
+      filter: contrast(1.02) saturate(1.02);
+    }
+
+    /* Halo */
+    .photoWrap::before{
+      content:"";
+      position:absolute;
+      inset:-18px;
+      border-radius:999px;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 40%), rgba(255,255,255,.18), transparent 55%);
+      opacity:.55;
+      filter: blur(10px);
+      pointer-events:none;
+      transition: opacity .25s ease;
+      mix-blend-mode: screen;
+    }
+
+    /* Scanline + shimmer + mild glitch noise */
+    .aiOverlay{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,.00),
+          rgba(255,255,255,.00) 6px,
+          rgba(255,255,255,.035) 7px
+        );
+      opacity:.22;
+      mix-blend-mode: overlay;
+      animation: scan 4.5s linear infinite;
+    }
+    @keyframes scan{
+      0%{ transform: translateY(-12%); }
+      100%{ transform: translateY(12%); }
+    }
+
+    .aiShimmer{
+      position:absolute;
+      inset:-40% -60%;
+      pointer-events:none;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.14), transparent);
+      transform: translateX(-45%) rotate(18deg);
+      opacity:.18;
+      filter: blur(1px);
+      animation: shimmer 3.8s ease-in-out infinite;
+      mix-blend-mode: screen;
+    }
+    @keyframes shimmer{
+      0%,100%{ transform: translateX(-55%) rotate(18deg); opacity:.10; }
+      50%{ transform: translateX(55%) rotate(18deg); opacity:.22; }
+    }
+
+    .aiGlitch{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,.55), transparent 55%),
+        radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,.45), transparent 55%),
+        radial-gradient(1px 1px at 55% 20%, rgba(255,255,255,.40), transparent 55%);
+      opacity:.12;
+      mix-blend-mode: screen;
+      animation: glitch 2.6s steps(2,end) infinite;
+    }
+    @keyframes glitch{
+      0%,100%{ transform: translate(0,0); opacity:.10; }
+      46%{ transform: translate(1px,-1px); opacity:.14; }
+      48%{ transform: translate(-2px,1px); opacity:.12; }
+      52%{ transform: translate(2px,0px); opacity:.15; }
+      56%{ transform: translate(-1px,1px); opacity:.11; }
+    }
+
+    h1{
+      margin: 6px 0 6px;
+      font-size: clamp(30px, 3.3vw, 42px);
+      font-weight: 660;
+      letter-spacing: -0.03em;
+    }
+
+    /* Typewriter area */
+    .bio{
+      margin: 10px auto 18px;
+      max-width: 78ch;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.75;
+      text-align: left;
+      position: relative;
+    }
+    @media (min-width: 760px){
+      .bio{ text-align: center; }
+    }
+    .caret{
+      display:inline-block;
+      width: 10px;
+      height: 1.05em;
+      vertical-align: -0.12em;
+      border-left: 2px solid rgba(255,255,255,.55);
+      margin-left: 3px;
+      animation: blink 1.05s step-end infinite;
+    }
+    @keyframes blink{ 50%{ opacity:0; } }
+
+    /* Buttons moved ABOVE Beyond Work */
+    .buttons{
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin: 14px 0 26px;
+    }
+    .btn{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 16px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      text-decoration:none;
+      color:var(--text);
+      font-size:14px;
+      background: rgba(255,255,255,.03);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      will-change: transform;
+      user-select:none;
+      overflow:hidden;
+    }
+    .btn::before{
+      content:"";
+      position:absolute;
+      top:-40%;
+      left:-30%;
+      width:60%;
+      height:180%;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+      transform:translateX(-140%) rotate(18deg);
+      transition:transform .55s ease;
+      pointer-events:none;
+    }
+    .btn:hover{
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.24);
+      transform: translateY(-2px);
+    }
+    .btn:hover::before{ transform:translateX(260%) rotate(18deg); }
+    .btn:active{ transform: translateY(-1px) scale(.99); }
+
+    .joshMark{ width:18px;height:18px; display:inline-flex; align-items:center; justify-content:center; }
+    .joshMark img{ width:18px;height:18px; object-fit:contain; display:block; opacity:.92; }
+
+    /* Beyond Work section */
+    .divider{
+      margin: 18px auto 14px;
+      width: 62px;
+      height: 1px;
+      background: rgba(255,255,255,.16);
+    }
+    .beyond{
+      margin-top: 6px;
+      text-align:center;
+    }
+    .beyond-label{
+      font-size:11px;
+      letter-spacing:.18em;
+      color: rgba(255,255,255,.38);
+      margin-bottom: 10px;
+    }
+    .personal{
+      margin:0 auto;
+      max-width: 62ch;
+      color: rgba(255,255,255,.55);
+      font-size:14px;
+      line-height:1.7;
+    }
+    .personal a{
+      color: var(--link);
+      text-decoration:none;
+      border-bottom:1px solid rgba(255,255,255,.18);
+      transition: border-color .18s ease, color .18s ease;
+    }
+    .personal a:hover{
+      color: rgba(255,255,255,.96);
+      border-bottom-color: rgba(255,255,255,.45);
+    }
+
+    /* Social */
+    .social{
+      display:flex;
+      justify-content:center;
+      gap:32px;
+      padding-top:22px;
+      margin-top:28px;
+      border-top:1px solid rgba(255,255,255,.10);
+    }
+
+    .social a{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:.65;
+      transition: all .25s ease;
+    }
+
+    .social img{
+      width:22px;
+      height:22px;
+      filter: brightness(0) invert(1);
+      transition: all .25s ease;
+    }
+
+    .social a:hover{
+      opacity:1;
+      transform: translateY(-2px);
+    }
+
+    .social a:hover img{
+      filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255,255,255,.35));
+    }
+
+    /* Quote */
+    .quote{
+      margin-top: 18px;
+      font-size: 13px;
+      color: rgba(255,255,255,.40);
+      letter-spacing: .02em;
+    }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      .aiOverlay,.aiShimmer,.aiGlitch,.reveal{ animation:none !important; }
+      .btn{ transition:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="bg"></canvas>
+  <div class="reveal"></div>
+  <div class="vignette"></div>
+
+  <main class="wrap">
+    <section class="content" aria-label="Alex Capecelatro">
+      <div class="top">
+        <div class="photoWrap" id="photoWrap">
+          <img src="alex.jpg" alt="Alex Capecelatro" />
+          <div class="aiOverlay"></div>
+          <div class="aiShimmer"></div>
+          <div class="aiGlitch"></div>
+        </div>
+
+        <h1>Alex Capecelatro</h1>
+
+        <div class="bio" aria-label="Biography">
+          <span id="typed"></span><span class="caret" id="caret"></span>
+        </div>
+
+        <!-- Buttons ABOVE Beyond Work -->
+        <div class="buttons">
+          <a class="btn magnet" href="https://josh.ai" target="_blank" rel="noopener">
+            <span class="joshMark" aria-hidden="true"><img src="josh_white.png" alt="" /></span>
+            Josh.ai <span style="opacity:.6">→</span>
+          </a>
+
+          <a class="btn magnet" href="https://instagram.com/alexcaps" target="_blank" rel="noopener">
+            Instagram <span style="opacity:.6">→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="beyond">
+        <div class="beyond-label">BEYOND WORK</div>
+        <p class="personal">
+          Outside of technology, Capecelatro is an
+          <a href="https://www.instagram.com/p/DTEipiFCUAk/?img_index=1" target="_blank" rel="noopener">art collector</a>,
+          <a href="https://www.instagram.com/p/DRkXEDoj84x/" target="_blank" rel="noopener">runner</a>,
+          <a href="https://www.instagram.com/p/C2V5umaA6pR/?img_index=1" target="_blank" rel="noopener">skier</a>,
+          <a href="https://www.instagram.com/p/DJmIXSAxoUc/" target="_blank" rel="noopener">pickleball player</a>,
+          and general
+          <a href="https://www.instagram.com/p/DUdzUJ4jtWs/?img_index=1" target="_blank" rel="noopener">outdoors enthusiast</a>,
+          with a passion for
+          <a href="https://www.instagram.com/p/C09Lvg9A411/?img_index=1" target="_blank" rel="noopener">travel</a>.
+        </p>
+      </div>
+
+      <div class="social" aria-label="Social links">
+        <a href="https://instagram.com/alexcaps" target="_blank" rel="noopener" aria-label="Instagram">
+          <img src="instagram.svg" alt="" />
+        </a>
+
+        <a href="https://linkedin.com/in/alexcaps" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <img src="linkedin.svg" alt="" />
+        </a>
+
+        <a href="https://facebook.com/alexcaps" target="_blank" rel="noopener" aria-label="Facebook">
+          <img src="facebook.svg" alt="" />
+        </a>
+      </div>
+
+      <div class="quote">“Stay hungry. Stay foolish.” — Steve Jobs</div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script>
+    // --------- Typewriter ---------
+    const fullText =
+      "Alex Capecelatro is an entrepreneur advancing artificial intelligence from research into real-world living environments. " +
+      "As CEO & Co-Founder of Josh.ai, he has led the development of award-winning, privacy-first AI systems that integrate natural language, " +
+      "large language models, and human-centered design into the modern home. " +
+      "A named inventor on multiple U.S. patents in intelligent systems and interaction design, he has served as Chair of CEDIA and sits on the Board of Integrated Systems Europe (ISE). " +
+      "Capecelatro regularly delivers keynote talks at Azione, ProSource, CEDIA, ISE, HTSA, NKBA, and other leading forums on AI, design, and the future of connected living.";
+
+    const typedEl = document.getElementById("typed");
+    const caretEl = document.getElementById("caret");
+
+    // Make typing feel premium: slight variable speed, pauses at punctuation
+    let i = 0;
+    function typeNext(){
+      if (i >= fullText.length) {
+        // fade caret out after finish
+        setTimeout(()=>{ caretEl.style.opacity = "0"; }, 600);
+        return;
+      }
+      typedEl.textContent += fullText[i];
+      const ch = fullText[i];
+      i++;
+
+      let delay = 14 + Math.random() * 18; // base
+      if (ch === "." || ch === "!" || ch === "?") delay += 220;
+      if (ch === "," || ch === ";") delay += 90;
+
+      setTimeout(typeNext, delay);
+    }
+    // Start after brief beat
+    setTimeout(typeNext, 320);
+
+    // --------- Portrait cursor-reactive halo ---------
+    const pw = document.getElementById("photoWrap");
+    function setHalo(e){
+      const r = pw.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * 100;
+      const y = ((e.clientY - r.top) / r.height) * 100;
+      pw.style.setProperty("--mx", x + "%");
+      pw.style.setProperty("--my", y + "%");
+    }
+    window.addEventListener("mousemove", (e)=> setHalo(e), { passive:true });
+
+    // --------- Button magnetic hover (desktop) ---------
+    const prefersReduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!prefersReduced) {
+      const magnets = document.querySelectorAll(".magnet");
+      magnets.forEach(el => {
+        el.addEventListener("mousemove", (e) => {
+          const r = el.getBoundingClientRect();
+          const dx = (e.clientX - (r.left + r.width/2)) / (r.width/2);
+          const dy = (e.clientY - (r.top + r.height/2)) / (r.height/2);
+          el.style.transform =
+            `translate(${Math.max(-8, Math.min(8, dx*8))}px, ${Math.max(-8, Math.min(8, dy*8))}px) translateY(-2px)`;
+        });
+        el.addEventListener("mouseleave", () => el.style.transform = "");
+      });
+    }
+
+    // --------- Three.js "Neural Network" background ---------
+    if (!prefersReduced) {
+      const canvas = document.getElementById("bg");
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true, powerPreference:"high-performance" });
+      renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.Fog(0x000000, 16, 70);
+
+      const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
+      camera.position.set(0, 0, 28);
+
+      const isMobile = matchMedia("(max-width: 700px)").matches;
+      const N = isMobile ? 520 : 1050;
+
+      const positions = new Float32Array(N * 3);
+      const base = new Float32Array(N * 3);
+      const vel = new Float32Array(N * 3);
+
+      function rnd(a,b){ return a + Math.random()*(b-a); }
+
+      for (let i=0;i<N;i++){
+        const ix=i*3;
+        const x=rnd(-22,22);
+        const y=rnd(-12,12);
+        const z=rnd(-22,22);
+        positions[ix]=x; positions[ix+1]=y; positions[ix+2]=z;
+        base[ix]=x; base[ix+1]=y; base[ix+2]=z;
+        vel[ix]=rnd(-0.006,0.006);
+        vel[ix+1]=rnd(-0.006,0.006);
+        vel[ix+2]=rnd(-0.004,0.004);
+      }
+
+      const pointsGeom = new THREE.BufferGeometry();
+      pointsGeom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+      const pointsMat = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: isMobile ? 0.055 : 0.045,
+        transparent: true,
+        opacity: 0.60,
+        depthWrite: false
+      });
+
+      const points = new THREE.Points(pointsGeom, pointsMat);
+      scene.add(points);
+
+      // Lines connect a subset of nearest neighbors (re-sampled over time)
+      const LINKS = isMobile ? 160 : 360;
+      const linePos = new Float32Array(LINKS * 2 * 3);
+      const lineGeom = new THREE.BufferGeometry();
+      lineGeom.setAttribute("position", new THREE.BufferAttribute(linePos, 3));
+      const lineMat = new THREE.LineBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.10,
+        depthWrite: false
+      });
+      const lines = new THREE.LineSegments(lineGeom, lineMat);
+      scene.add(lines);
+
+      // cursor attraction
+      const mouse = { x:0, y:0 };
+      const target = { x:0, y:0 };
+      addEventListener("mousemove", (e)=>{
+        mouse.x = (e.clientX / innerWidth) * 2 - 1;
+        mouse.y = -((e.clientY / innerHeight) * 2 - 1);
+      }, { passive:true });
+
+      function resize(){
+        renderer.setSize(innerWidth, innerHeight, false);
+        camera.aspect = innerWidth / innerHeight;
+        camera.updateProjectionMatrix();
+      }
+      addEventListener("resize", resize);
+      resize();
+
+      function rebuildLinks(){
+        // Randomly connect nodes that are near-ish each other to feel like clusters
+        for (let i=0;i<LINKS;i++){
+          const a = Math.floor(Math.random()*N);
+          // choose b near a (bias)
+          let b = a;
+          for (let k=0;k<6;k++){
+            const candidate = (a + Math.floor(rnd(-40,40)) + N) % N;
+            b = candidate;
+          }
+          const ax=a*3, bx=b*3;
+          const o=i*6;
+          linePos[o]=positions[ax];
+          linePos[o+1]=positions[ax+1];
+          linePos[o+2]=positions[ax+2];
+          linePos[o+3]=positions[bx];
+          linePos[o+4]=positions[bx+1];
+          linePos[o+5]=positions[bx+2];
+        }
+        lineGeom.attributes.position.needsUpdate = true;
+      }
+
+      const clock = new THREE.Clock();
+      let t = 0;
+
+      function tick(){
+        const dt = Math.min(clock.getDelta(), 0.033);
+        t += dt;
+
+        target.x += (mouse.x - target.x) * 0.06;
+        target.y += (mouse.y - target.y) * 0.06;
+
+        camera.position.x = target.x * 1.35;
+        camera.position.y = target.y * 0.95;
+        camera.lookAt(0,0,0);
+
+        // “breathing” cluster movement + cursor influence
+        const pos = pointsGeom.attributes.position.array;
+
+        const cx = target.x * 7.0;
+        const cy = target.y * 4.2;
+
+        for (let i=0;i<N;i++){
+          const ix=i*3;
+          // drift
+          pos[ix]   += vel[ix];
+          pos[ix+1] += vel[ix+1];
+          pos[ix+2] += vel[ix+2];
+
+          // gentle curl noise feeling
+          const wob = Math.sin(t*0.8 + i*0.013) * 0.006;
+          pos[ix]   += wob;
+          pos[ix+1] -= wob * 0.7;
+
+          // cursor pull (subtle)
+          pos[ix]   += (cx - pos[ix]) * 0.00018;
+          pos[ix+1] += (cy - pos[ix+1]) * 0.00018;
+
+          // keep near base (spring back)
+          pos[ix]   += (base[ix]   - pos[ix])   * 0.0018;
+          pos[ix+1] += (base[ix+1] - pos[ix+1]) * 0.0018;
+          pos[ix+2] += (base[ix+2] - pos[ix+2]) * 0.0013;
+        }
+
+        pointsGeom.attributes.position.needsUpdate = true;
+
+        // rebuild links occasionally for living “neural” feel
+        if ((Math.floor(t * 10) % 7) === 0) rebuildLinks();
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(tick);
+      }
+
+      rebuildLinks();
+      tick();
+    }
+  </script>
+</body>
+</html>
