@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alex Capecelatro</title>
+
+  <meta name="description" content="Alex Capecelatro — CEO & Co-Founder of Josh.ai. Early pioneer of AI in the home." />
+  <meta name="robots" content="index,follow" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <style>
+    :root{
+      --bg:#000;
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.62);
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      background-color:#000; /* you requested this */
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      overflow-x:hidden;
+    }
+
+    /* The CodePen-style background: we’ll attach a class to the injected container and pin it */
+    .bgfx{
+      position:fixed !important;
+      inset:0 !important;
+      z-index:0 !important;
+      pointer-events:none !important;
+      overflow:hidden !important;
+    }
+    .bgfx canvas{
+      width:100% !important;
+      height:100% !important;
+      display:block !important;
+    }
+
+    /* Content layers above */
+    .wrap{
+      position:relative;
+      z-index:3;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:72px 20px;
+      text-align:center;
+    }
+    .content{ width:min(880px, 100%); }
+
+    /* Portrait */
+    .photoWrap{
+      width:180px;height:180px;
+      border-radius:50%;
+      overflow:hidden;
+      position:relative;
+      margin:0 auto 18px;
+      box-shadow:0 30px 110px rgba(0,0,0,.85);
+    }
+    .photoWrap img{
+      width:100%;height:100%;
+      object-fit:cover;
+      transform:scale(1.06);
+      display:block;
+    }
+    .aiOverlay{
+      position:absolute; inset:0;
+      background:repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.02),
+        rgba(255,255,255,.02) 6px,
+        rgba(255,255,255,.06) 7px
+      );
+      opacity:.22;
+      animation:scan 4.2s linear infinite;
+      mix-blend-mode:overlay;
+      pointer-events:none;
+    }
+    @keyframes scan{
+      0%{ transform:translateY(-12%); }
+      100%{ transform:translateY(12%); }
+    }
+
+    h1{
+      margin:8px 0 0;
+      font-size:clamp(30px,3.5vw,42px);
+      font-weight:650;
+      letter-spacing:-.03em;
+    }
+
+    /* Typewriter */
+    .bio{
+      max-width:820px;
+      margin:18px auto 18px;
+      color:var(--muted);
+      line-height:1.7;
+    }
+    .caret{
+      border-left:2px solid rgba(255,255,255,.6);
+      margin-left:4px;
+      animation:blink 1s step-end infinite;
+    }
+    @keyframes blink{ 50%{ opacity:0; } }
+
+    /* Buttons */
+    .buttons{
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      margin:16px 0 26px;
+      flex-wrap:wrap;
+    }
+    .btn{
+      padding:12px 16px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.15);
+      text-decoration:none;
+      color:#fff;
+      background:rgba(255,255,255,.04);
+      transition:.2s ease;
+    }
+    .btn:hover{
+      background:rgba(255,255,255,.08);
+      transform:translateY(-2px);
+    }
+
+    /* Beyond work */
+    .divider{
+      width:60px;height:1px;
+      background:rgba(255,255,255,.15);
+      margin:0 auto 14px;
+    }
+    .beyond-label{
+      font-size:11px;
+      letter-spacing:.18em;
+      color:rgba(255,255,255,.4);
+      margin-bottom:10px;
+    }
+    .personal{
+      max-width:680px;
+      margin:0 auto;
+      color:rgba(255,255,255,.55);
+      line-height:1.6;
+    }
+    .personal a{
+      color:#fff;
+      text-decoration:none;
+      border-bottom:1px solid rgba(255,255,255,.2);
+    }
+    .personal a:hover{ border-bottom-color:#fff; }
+
+    /* Social icons (no circles) */
+    .social{
+      display:flex;
+      justify-content:center;
+      gap:32px;
+      margin-top:30px;
+      border-top:1px solid rgba(255,255,255,.1);
+      padding-top:24px;
+    }
+    .social a{
+      opacity:.65;
+      transition:.25s ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .social img{
+      width:22px;
+      height:22px;
+      filter:brightness(0) invert(1);
+      transition:.25s ease;
+      display:block;
+    }
+    .social a:hover{
+      opacity:1;
+      transform:translateY(-2px);
+    }
+    .social a:hover img{
+      filter:brightness(0) invert(1) drop-shadow(0 0 10px rgba(255,255,255,.35));
+    }
+
+    .quote{
+      margin-top:18px;
+      font-size:13px;
+      color:rgba(255,255,255,.4);
+    }
+
+    /* Mobile tweaks */
+    @media (max-width: 420px){
+      .photoWrap{ width:156px;height:156px; }
+      .social{ gap:26px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <section class="content">
+      <div class="photoWrap">
+        <img src="alex.jpg" alt="Alex Capecelatro" />
+        <div class="aiOverlay"></div>
+      </div>
+
+      <h1>Alex Capecelatro</h1>
+
+      <div class="bio">
+        <span id="typed"></span><span class="caret" id="caret"></span>
+      </div>
+
+      <div class="buttons">
+        <a class="btn" href="https://josh.ai" target="_blank" rel="noopener">Josh.ai →</a>
+        <a class="btn" href="https://instagram.com/alexcaps" target="_blank" rel="noopener">Instagram →</a>
+      </div>
+
+      <div class="divider"></div>
+      <div class="beyond-label">BEYOND WORK</div>
+
+      <p class="personal">
+        Outside of technology, Capecelatro is an
+        <a href="https://www.instagram.com/p/DTEipiFCUAk/?img_index=1" target="_blank" rel="noopener">art collector</a>,
+        <a href="https://www.instagram.com/p/DRkXEDoj84x/" target="_blank" rel="noopener">runner</a>,
+        <a href="https://www.instagram.com/p/C2V5umaA6pR/?img_index=1" target="_blank" rel="noopener">skier</a>,
+        <a href="https://www.instagram.com/p/DJmIXSAxoUc/" target="_blank" rel="noopener">pickleball player</a>,
+        and general
+        <a href="https://www.instagram.com/p/DUdzUJ4jtWs/?img_index=1" target="_blank" rel="noopener">outdoors enthusiast</a>,
+        with a passion for
+        <a href="https://www.instagram.com/p/C09Lvg9A411/?img_index=1" target="_blank" rel="noopener">travel</a>.
+      </p>
+
+      <div class="social" aria-label="Social links">
+        <a href="https://instagram.com/alexcaps" target="_blank" rel="noopener" aria-label="Instagram">
+          <img src="instagram.svg" alt="" />
+        </a>
+        <a href="https://linkedin.com/in/alexcaps" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <img src="linkedin.svg" alt="" />
+        </a>
+        <a href="https://facebook.com/alexcaps" target="_blank" rel="noopener" aria-label="Facebook">
+          <img src="facebook.svg" alt="" />
+        </a>
+      </div>
+
+      <div class="quote">“Stay hungry. Stay foolish.” — Steve Jobs</div>
+    </section>
+  </main>
+
+  <!-- Your CodePen background JS (uploaded file). It injects its own canvas into the DOM. -->
+  <script src="javascript.js"></script>
+
+  <!-- Pin the injected background behind everything -->
+  <script>
+    (function pinBackground(){
+      // The uploaded script creates a DIV container and appends a canvas into it.
+      // We find the first canvas it created and pin its parent container.
+      const tryPin = () => {
+        const canvases = Array.from(document.querySelectorAll("canvas"));
+        if (!canvases.length) return false;
+
+        // Prefer the largest canvas (background)
+        canvases.sort((a,b) => (b.width*b.height) - (a.width*a.height));
+        const bgCanvas = canvases[0];
+        const container = bgCanvas.parentElement;
+
+        if (!container) return false;
+        container.classList.add("bgfx");
+        return true;
+      };
+
+      if (!tryPin()) {
+        // In case the background script finishes a tick later
+        window.setTimeout(tryPin, 50);
+      }
+    })();
+  </script>
+
+  <!-- Fast typewriter -->
+  <script>
+    const fullText =
+      "Alex Capecelatro is an entrepreneur advancing artificial intelligence from research into real-world living environments. " +
+      "As CEO & Co-Founder of Josh.ai, he has led the development of award-winning, privacy-first AI systems that bring natural language, " +
+      "large language models, and human-centered design into the modern home. " +
+      "A named inventor on multiple U.S. patents in intelligent systems and interaction design, he has served as Chair of CEDIA and sits on the Board of Integrated Systems Europe (ISE). " +
+      "He regularly speaks at leading industry forums on AI, design, and the future of connected living.";
+
+    const typedEl = document.getElementById("typed");
+    const caretEl = document.getElementById("caret");
+    let i = 0;
+
+    function typeNe:contentReference[oaicite:1]{index=1}
